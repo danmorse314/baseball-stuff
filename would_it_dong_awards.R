@@ -185,6 +185,10 @@ make_unicorn_plot <- function(tm, szn){
 
 make_unicorn_plot("BOS", 2022)
 
+transparent <- function(img) {
+  magick::image_fx(img, expression = "0.8*a", channel = "alpha")
+}
+
 chart |>
   filter(team_abbr != "COL") |>
   ggplot(aes(xhr, hr)) +
@@ -197,13 +201,13 @@ chart |>
     yintercept = weighted.mean(chart$hr, chart$hits),
     linetype = "dashed", color = "lightgray"
   ) +
-  ggrepel::geom_text_repel(
-    aes(label = stadium)
-  ) +
   ggimage::geom_image(
     aes(image = team_logo),
     asp = 8/5, size = 0.05,
     image_fun = transparent
+  ) +
+  ggrepel::geom_text_repel(
+    aes(label = stadium), size = 3
   ) +
   theme_bw() +
   labs(
