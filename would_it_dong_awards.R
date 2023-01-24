@@ -123,7 +123,8 @@ make_unicorn_plot <- function(tm, szn){
     ggplot2::ggplot() +
     ggimage::geom_image(
       aes(x = 0, y = 250, image = stadium_logo),
-      size = 0.25, image_fun = transparent
+      size = 0.25, asp = 1,
+      image_fun = transparent
     ) +
     geom_text(
       aes(x = 0, y = 160, label = glue::glue("{stad}")),
@@ -196,9 +197,13 @@ chart |>
     yintercept = weighted.mean(chart$hr, chart$hits),
     linetype = "dashed", color = "lightgray"
   ) +
+  ggrepel::geom_text_repel(
+    aes(label = stadium)
+  ) +
   ggimage::geom_image(
     aes(image = team_logo),
-    asp = 8/5, size = 0.05
+    asp = 8/5, size = 0.05,
+    image_fun = transparent
   ) +
   theme_bw() +
   labs(
@@ -206,3 +211,4 @@ chart |>
     title = "Home Runs vs Expectation in 2022 by stadium",
     caption = "data: @would_it_dong"
   )
+ggsave("figures/stadium_hrs_vs_expected_2022.png", width = 8, height = 5, dpi = 500)
